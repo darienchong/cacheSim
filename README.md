@@ -1,9 +1,9 @@
 # cacheSim
 Cache simulator written in Java. Work in progress.
-
 Currently supports the following modes:
-Direct Mapping (<=> 1 way Set-Associative Cache)
-N-way Set-Associative Cache with LRU block replacement policy
+
+- Direct Mapping (<=> 1 way Set-Associative Cache)
+- N-way Set-Associative Cache with LRU block replacement policy
 
 # How to use
 Compile the .java files.
@@ -22,4 +22,4 @@ As such, the full input should be as follows:
 ```
 >>> java Main [0|1] < data
 ```
-where data has input in the format as above.
+where `data` is a file with input in the format as above.
