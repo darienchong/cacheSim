@@ -1,6 +1,9 @@
-package org.snajef.cacheSim.model;
+package org.snajef.cacheSim.cache;
 
 import java.util.HashSet;
+
+import org.snajef.cacheSim.model.CacheBlock;
+import org.snajef.cacheSim.model.Result;
 
 public abstract class Cache {
 	protected CacheBlock[][] cacheBlocks;
@@ -13,12 +16,13 @@ public abstract class Cache {
 	// For statistics
 	protected int nBlocksUsed = 0;
 	protected boolean isFull = false;
-	protected int nHits = 0;
-	protected int nCapacityMisses = 0;
-	protected int nConflictCapacityMisses = 0;
+	
 	protected int nColdMisses = 0;
 	protected int nConflictMisses = 0;
+	protected int nCapacityMisses = 0;
 	protected int nTotalMisses = 0;
+	
+	protected int nHits = 0;
 	protected int nAccesses = 0;
 	
 	
@@ -58,7 +62,6 @@ public abstract class Cache {
 		
 		int tag = getTag(address);
 		int setIdx = getSetIdx(address);
-		int offset = getOffset(address);
 		
 		CacheBlock[] set = cacheBlocks[setIdx];
 		
@@ -79,11 +82,7 @@ public abstract class Cache {
 		// Need to check what kind of miss it is (conflict/cold/capacity)
 		Result result;
 		if (isFull) {
-			if (previouslyStoredTags.contains(tag)) {
-				result = Result.CONFLICT_CAPACITY_MISS;
-			} else {
-				result = Result.CAPACITY_MISS;
-			}
+			result = Result.CAPACITY_MISS;
 		} else if (!isFull && previouslyStoredTags.contains(tag)) {
 			result = Result.CONFLICT_MISS;
 		} else {
@@ -127,10 +126,6 @@ public abstract class Cache {
 				nTotalMisses++;
 				System.out.printf("Miss! (Cold)\n");
 				break;
-			case CONFLICT_CAPACITY_MISS:
-				nConflictCapacityMisses++;
-				System.out.printf("Miss! (Conflict + Capacity)\n");
-				break;
 			default:
 				break;
 		}
@@ -146,9 +141,8 @@ public abstract class Cache {
 		System.out.println("     MISS TYPE      ||       TALLY");
 		System.out.println("--------------------||------------------");
 		System.out.println("Cold                || " + nColdMisses);
-		System.out.println("Conflict only       || " + nConflictMisses);
-		System.out.println("Capacity only       || " + nCapacityMisses);
-		System.out.println("Conflict + Capacity || " + nConflictCapacityMisses);
+		System.out.println("Conflict            || " + nConflictMisses);
+		System.out.println("Capacity            || " + nCapacityMisses);
 		System.out.println("========================================");
 		System.out.println("");
 		System.out.println("========== HITS AND HIT RATE ===========");

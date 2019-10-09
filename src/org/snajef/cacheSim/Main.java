@@ -2,9 +2,14 @@ package org.snajef.cacheSim;
 
 import java.util.Scanner;
 
-import org.snajef.cacheSim.model.LRUCache;
+import org.snajef.cacheSim.impl.LRUCacheImpl;
+import org.snajef.cacheSim.impl.SimpleLRUCacheImpl;
 
 public class Main {
+	// TODO:
+	// 1. Implement other block replacement policy types
+	// 2. Implement selection for block replacement policy
+	// 3. Implement a better way to set parameters?
 	public static void main (String[] args) {
 		Scanner sc = new Scanner(System.in);
 		
@@ -16,7 +21,7 @@ public class Main {
 		String cacheType = (ways > 1 ? ways + "-way Set-Associative (LRU)" : "Direct Mapped");
 		System.out.println(cacheType + " Cache [" + nCacheBlocks * blockSize + " total bytes | " + blockSize + " byte block size]");
 		
-		LRUCache cache = new LRUCache(ways, nCacheBlocks, blockSize);
+		LRUCacheImpl cache = new SimpleLRUCacheImpl(ways, nCacheBlocks, blockSize);
 		
 		while (sc.hasNextInt(16)) {
 			int address = sc.nextInt(16);
@@ -27,6 +32,7 @@ public class Main {
 			}
 		}
 		
+		System.out.println("");
 		cache.getStatistics();
 	}
 }

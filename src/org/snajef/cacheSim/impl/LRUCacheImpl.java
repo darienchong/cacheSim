@@ -1,20 +1,21 @@
-package org.snajef.cacheSim.model;
+package org.snajef.cacheSim.impl;
 
 import java.time.LocalDateTime;
 
-public class LRUCache extends Cache {
-	private LocalDateTime[][] lastAccessed;
+import org.snajef.cacheSim.cache.Cache;
+import org.snajef.cacheSim.model.CacheBlock;
+
+public class LRUCacheImpl extends Cache {
+	protected LocalDateTime[][] lastAccessed;
 	
-	public LRUCache(int w, int cacheSize, int blockSz) {
+	public LRUCacheImpl(int w, int cacheSize, int blockSz) {
 		super(w, cacheSize, blockSz);
 		lastAccessed = new LocalDateTime[nSets][ways];
 	}
 	
 	@Override
 	public void updateCacheAfterHit(int address, int blockIdx) {
-		int tag = getTag(address);
 		int setIdx = getSetIdx(address);
-		int offset = getOffset(address);
 		
 		lastAccessed[setIdx][blockIdx] = LocalDateTime.now();
 	}
@@ -24,7 +25,6 @@ public class LRUCache extends Cache {
 		// Update cache according to LRU block replacement policy
 		int tag = getTag(address);
 		int setIdx = getSetIdx(address);
-		int offset = getOffset(address);
 		
 		// We need to find an empty block.
 		// If no empty block exists, we need to evict the least recently accessed block.
