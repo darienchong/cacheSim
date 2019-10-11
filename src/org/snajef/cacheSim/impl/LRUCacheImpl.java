@@ -14,14 +14,14 @@ public class LRUCacheImpl extends Cache {
 	}
 	
 	@Override
-	public void updateCacheAfterHit(int address, int blockIdx) {
+	public void updateCacheAfterHit(long address, int blockIdx) {
 		int setIdx = getSetIdx(address);
 		
 		lastAccessed[setIdx][blockIdx] = LocalDateTime.now();
 	}
 	
 	@Override
-	public void updateCacheAfterMiss(int address) {
+	public void updateCacheAfterMiss(long address) {
 		// Update cache according to LRU block replacement policy
 		int tag = getTag(address);
 		int setIdx = getSetIdx(address);

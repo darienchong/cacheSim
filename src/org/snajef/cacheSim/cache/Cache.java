@@ -54,7 +54,9 @@ public abstract class Cache {
 		return cacheBlocks;
 	}
 	
-	public Result accessCache(int address) {
+	// Addresses need to be stored as `long` because 32-bit hex numbers exceed
+	// the storage capacity of `int` in Java. Everything else can still safely be stored as `int`.
+	public Result accessCache(long address) {
 		// Tag = addr[31:N+M]
 		// Set idx = addr[N+M-1:N]
 		// Offset = addr[N-1:0]
@@ -95,7 +97,7 @@ public abstract class Cache {
 	}
 	
 	// Use this for tracking and verbose output.
-	public Result accessCacheVerbose(int address) {
+	public Result accessCacheVerbose(long address) {
 		nAccesses++;
 		
 		System.out.printf(
@@ -153,19 +155,19 @@ public abstract class Cache {
 		System.out.println("========================================");
 	}
 	
-	protected int getTag(int address) {
-		return address >> (N + M);
+	protected int getTag(long address) {
+		return (int) (address >> (N + M));
 	}
 	
-	protected int getSetIdx(int address) {
-		return (address >> N) % (int) Math.pow(2, M);
+	protected int getSetIdx(long address) {
+		return (int) ((address >> N) % (int) Math.pow(2, M));
 	}
 	
-	protected int getOffset(int address) {
-		return address % (int) Math.pow(2, N);
+	protected int getOffset(long address) {
+		return (int) (address % (int) Math.pow(2, N));
 	}
 	
-	public abstract void updateCacheAfterHit(int address, int blockIdx);
+	public abstract void updateCacheAfterHit(long address, int blockIdx);
 	
-	public abstract void updateCacheAfterMiss(int address);
+	public abstract void updateCacheAfterMiss(long address);
 }

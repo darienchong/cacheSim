@@ -17,14 +17,16 @@ public class Main {
 		int ways = sc.nextInt();
 		int nCacheBlocks = sc.nextInt();
 		int blockSize = sc.nextInt();
+		// Eat the empty string after reading ints.
+		sc.nextLine();
 		
 		String cacheType = (ways > 1 ? ways + "-way Set-Associative (LRU)" : "Direct Mapped");
 		System.out.println(cacheType + " Cache [" + nCacheBlocks * blockSize + " total bytes | " + blockSize + " byte block size]");
 		
 		LRUCacheImpl cache = new SimpleLRUCacheImpl(ways, nCacheBlocks, blockSize);
 		
-		while (sc.hasNextInt(16)) {
-			int address = sc.nextInt(16);
+		while (sc.hasNextLine()) {
+			long address = Long.parseLong(sc.nextLine(), 16);
 			cache.accessCacheVerbose(address);
 			if (printCacheState) {
 				cache.printCacheState();

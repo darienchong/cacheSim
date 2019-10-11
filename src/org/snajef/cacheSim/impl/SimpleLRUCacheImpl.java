@@ -16,7 +16,7 @@ public class SimpleLRUCacheImpl extends LRUCacheImpl {
 	}
 	
 	@Override
-	public Result accessCache(int address) {
+	public Result accessCache(long address) {
 		// Tag = addr[31:N+M]
 		// Set idx = addr[N+M-1:N]
 		// Offset = addr[N-1:0]
