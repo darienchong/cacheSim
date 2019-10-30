@@ -25,6 +25,7 @@ public class LRUCacheImpl extends Cache {
 		// Update cache according to LRU block replacement policy
 		int tag = getTag(address);
 		int setIdx = getSetIdx(address);
+		boolean emptyBlockFound = false;
 		
 		// We need to find an empty block.
 		// If no empty block exists, we need to evict the least recently accessed block.
@@ -38,24 +39,28 @@ public class LRUCacheImpl extends Cache {
 				if (nBlocksUsed == nCacheBlocks) {
 					isFull = true;
 				}
-				return;
+				emptyBlockFound = true;
+				break;
 			}
 		}
 		
 		// We can't find an empty block.
 		// Find the least recently updated block in the set and replace (evict) it.
-		int leastRecentlyUpdatedBlockIdx = 0;
-		LocalDateTime timestamp = lastAccessed[setIdx][0];
-		for (int i = 0; i < ways; i++) {
-			if (lastAccessed[setIdx][i].isBefore(timestamp)) {
-				leastRecentlyUpdatedBlockIdx = i;
-				timestamp = lastAccessed[setIdx][i];
+		if (!emptyBlockFound) {
+			int leastRecentlyUpdatedBlockIdx = 0;
+			LocalDateTime timestamp = lastAccessed[setIdx][0];
+			for (int i = 0; i < ways; i++) {
+				if (lastAccessed[setIdx][i].isBefore(timestamp)) {
+					leastRecentlyUpdatedBlockIdx = i;
+					timestamp = lastAccessed[setIdx][i];
+				}
 			}
+			
+			CacheBlock blockToReplace = cacheBlocks[setIdx][leastRecentlyUpdatedBlockIdx];
+			blockToReplace.setTag(tag);
+			lastAccessed[setIdx][leastRecentlyUpdatedBlockIdx] = LocalDateTime.now();
 		}
 		
-		CacheBlock blockToReplace = cacheBlocks[setIdx][leastRecentlyUpdatedBlockIdx];
-		blockToReplace.setTag(tag);
-		lastAccessed[setIdx][leastRecentlyUpdatedBlockIdx] = LocalDateTime.now();
 		previouslyStoredTags.add(tag);
 	}
 	
@@ -76,6 +81,15 @@ public class LRUCacheImpl extends Cache {
 				System.out.println(spacePad + "[$idx: " + k + "]" + cacheBlocks[i][k].toString() + "[lastAccessed: " + (lastAccessed[i][k] == null ? "Never" : lastAccessed[i][k]) + "]");
 			}
 		}
+		System.out.println("----------------------------------------");
+	}
+	
+	public void printPreviouslyStoredTags() {
+		System.out.println("----------------------------------------");
+		System.out.println("Previously stored tags:");
+		previouslyStoredTags.forEach(tag -> {
+			System.out.println("    " + String.format("0x%x", tag));
+		});
 		System.out.println("----------------------------------------");
 	}
 }

@@ -32,6 +32,7 @@ public class Main {
 				cache.printCacheState();
 				System.out.println("");
 			}
+			cache.printPreviouslyStoredTags();
 		}
 		
 		System.out.println("");
