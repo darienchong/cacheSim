@@ -43,7 +43,7 @@ public class SimpleLRUCacheImpl extends LRUCacheImpl {
 		// For the current set, none of the blocks match
 		// Need to check what kind of miss it is (conflict/cold/capacity)
 		Result result;
-		if (previouslyStoredTags.contains(tag)) {
+		if (previouslyStoredTags.get(setIdx).contains(tag)) {
 			result = Result.CONFLICT_MISS;
 		} else {
 			result = Result.COLD_MISS;

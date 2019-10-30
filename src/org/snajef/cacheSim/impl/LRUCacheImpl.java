@@ -61,7 +61,7 @@ public class LRUCacheImpl extends Cache {
 			lastAccessed[setIdx][leastRecentlyUpdatedBlockIdx] = LocalDateTime.now();
 		}
 		
-		previouslyStoredTags.add(tag);
+		previouslyStoredTags.get(setIdx).add(tag);
 	}
 	
 	public void printCacheState() {
@@ -87,9 +87,12 @@ public class LRUCacheImpl extends Cache {
 	public void printPreviouslyStoredTags() {
 		System.out.println("----------------------------------------");
 		System.out.println("Previously stored tags:");
-		previouslyStoredTags.forEach(tag -> {
-			System.out.println("    " + String.format("0x%x", tag));
-		});
+		for (int i = 0; i < nSets; i++) {
+			System.out.println("  " + "Set " + i + ":");
+			previouslyStoredTags.get(i).forEach(tag -> {
+				System.out.println("    " + String.format("0x%x", tag));
+			});
+		}
 		System.out.println("----------------------------------------");
 	}
 }

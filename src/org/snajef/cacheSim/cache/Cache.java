@@ -1,5 +1,6 @@
 package org.snajef.cacheSim.cache;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.snajef.cacheSim.model.CacheBlock;
@@ -11,7 +12,7 @@ public abstract class Cache {
 	protected int nCacheBlocks;
 	protected int blockSize;
 	protected int nSets;
-	protected HashSet<Integer> previouslyStoredTags;
+	protected HashMap<Integer,HashSet<Integer>> previouslyStoredTags;
 	
 	// For statistics
 	protected int nBlocksUsed = 0;
@@ -37,12 +38,13 @@ public abstract class Cache {
 		blockSize = blockSz;
 		this.nCacheBlocks = nCacheBlocks;
 		nSets = nCacheBlocks / ways;
-		previouslyStoredTags = new HashSet<>();
+		previouslyStoredTags = new HashMap<>();
 		
 		cacheBlocks = new CacheBlock[nSets][ways];
 		for (int i = 0; i < nSets; i++) {
 			for (int j = 0; j < ways; j++) {
 				cacheBlocks[i][j] = new CacheBlock(-1, false);
+				previouslyStoredTags.put(i, new HashSet<>());
 			}
 		}
 		
@@ -85,7 +87,7 @@ public abstract class Cache {
 		Result result;
 		if (isFull) {
 			result = Result.CAPACITY_MISS;
-		} else if (!isFull && previouslyStoredTags.contains(tag)) {
+		} else if (!isFull && previouslyStoredTags.get(setIdx).contains(tag)) {
 			result = Result.CONFLICT_MISS;
 		} else {
 			result = Result.COLD_MISS;
