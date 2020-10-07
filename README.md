@@ -24,4 +24,5 @@ As such, the full input should be as follows:
 ```
 where `data` is a file with input in the format as above.
 
-# Pull request for Hacktoberfest \#1
+=======
+# Pull Request for Hacktoberfest \#4
