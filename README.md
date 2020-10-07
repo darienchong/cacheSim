@@ -23,5 +23,3 @@ As such, the full input should be as follows:
 >>> java Main [0|1] < data
 ```
 where `data` is a file with input in the format as above.
-
-# Pull Request for Hacktoberfest \#3
