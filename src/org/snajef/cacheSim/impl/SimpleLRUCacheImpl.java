@@ -31,13 +31,13 @@ public class SimpleLRUCacheImpl extends LRUCacheImpl {
 			int currentTag = set[i].getTag();
 			boolean currentValid = set[i].isValid();
 			
-			if (currentValid) {
-				if (currentTag == tag) {
-					// Cache hit
-					updateCacheAfterHit(address, i);
-					return Result.HIT;
-				}
+			if (!currentValid || currentTag != tag) {
+				continue;
 			}
+			
+			// Cache hit
+			updateCacheAfterHit(address, i);
+			return Result.HIT;
 		}
 		
 		// For the current set, none of the blocks match
